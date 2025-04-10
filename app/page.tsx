@@ -41,7 +41,7 @@ const hackathonEvents = [
     id: "3",
     title: "TDX Hackathon",
     description: "Join your fellow participants for a fun kick-off event",
-    date: "June 29-30, 2025",
+    date: "April 29-30, 2025",
     venue: "Bangalore International Exhibition Centre Hall 1",
     image: "/sales.png",
     isExternal: true,
