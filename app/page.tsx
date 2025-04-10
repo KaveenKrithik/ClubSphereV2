@@ -130,7 +130,7 @@ const clubsData = [
     description: "IoT Alliance, or IOTA as we are popularly known, are the only AICTE recognised club. We create Innovative Projects and host Tech Events in IoT, AI and Robotics",
     memberCount: 50,
     foundedYear: 2018,
-    logo: "https://placehold.co/200x200/4338ca/ffffff?text=IoTAlliance",
+    logo: "iota.jpg",
     enrollmentLink: "https://iotalliancesrm.vercel.app/",
   },
   {
@@ -139,7 +139,7 @@ const clubsData = [
     description: "Code Nex, founded in 2024 at SRM KTR, focuses on app and web development, blockchain, and AI/ML..",
     memberCount: 85,
     foundedYear: 2024,
-    logo: "https://placehold.co/200x200/7c3aed/ffffff?text=CODENEX",
+    logo: "codenex.png",
     enrollmentLink: "https://www.codenex.co.in/",
   },
   {
@@ -148,7 +148,7 @@ const clubsData = [
     description: "The campus club you love. We make tech exuberant and open source. We know no limits.",
     memberCount: 65,
     foundedYear: 2015,
-    logo: "https://placehold.co/200x200/0891b2/ffffff?text=SRMKZILLA",
+    logo: "/kzilla.jpg",
     enrollmentLink: "https://www.srmkzilla.net/",
   },
   {
@@ -157,7 +157,7 @@ const clubsData = [
     description: "Cherry+ Network, the coolest club on campus, where you discover the secret to success and pave the way for your dreams.",
     memberCount: 50,
     foundedYear: 2020,
-    logo: "https://placehold.co/200x200/f97316/ffffff?text=Cherry+ Network",
+    logo: "/cherry.jpg",
     enrollmentLink: "https://cherrynetwork.in/",
   },
   {
@@ -166,7 +166,7 @@ const clubsData = [
     description: "GitHub Community SRM is the official student-led community affiliated with GitHub, spearheading the open-source revolution at SRMIST.",
     memberCount: 70,
     foundedYear: 2017,
-    logo: "https://placehold.co/200x200/ec4899/ffffff?text=Github+Community+SRM",
+    logo: "/githubcom.png",
     enrollmentLink: "https://www.githubsrmist.tech/",
   },
   
@@ -176,7 +176,7 @@ const clubsData = [
     description: "Cintel Student Association at SRMIST fosters innovation through workshops, hackathons & research, bridging academics & industry while building leadership.",
     memberCount: 55,
     foundedYear: 2021,
-    logo: "https://placehold.co/200x200/10b981/ffffff?text=Cintel+Student+Association",
+    logo: "cintel.jpg",
     enrollmentLink: "https://www.srmist.edu.in/department/department-of-computational-intelligence/cintel-student-association/",
   },
   {
@@ -185,7 +185,7 @@ const clubsData = [
     description: "Every bug is just a hidden feature waiting to be discovered",
     memberCount: 55,
     foundedYear: 2021,
-    logo: "https://placehold.co/200x200/10b981/ffffff?text=dBug+Labs",
+    logo: "dbug.jpg",
     enrollmentLink: "https://dbuglabs.vercel.app/",
   },
   {
@@ -194,7 +194,7 @@ const clubsData = [
     description: "The SRM Quantum Computing Club is a dynamic student organization at SRM University, united by a passion for quantum computing.",
     memberCount: 55,
     foundedYear: 2021,
-    logo: "https://placehold.co/200x200/10b981/ffffff?text=sqcc",
+    logo: "/qccs.jpg",
     enrollmentLink: "https://www.sqcc.xyz/",
   },
 
@@ -448,7 +448,7 @@ export default function Home() {
                 whileInView={{ scale: 1 }}
                 transition={{ duration: 1.5 }}
                 viewport={{ once: true }}
-                src="https://placehold.co/600x400/6366f1/ffffff?text=Students+Collaborating"
+                src="https://placehold.co/600x400/6366f1/ffffff?text=Club+Sphere"
                 alt="Students collaborating"
                 className="object-cover w-full h-full"
               />
@@ -578,5 +578,8 @@ export default function Home() {
       </footer>
     </div>
   )
+  
 }
+
+
 
