@@ -446,7 +446,7 @@ export default function Home() {
               <div className="w-full h-full flex items-center justify-center">
    <motion.div
     initial={{ scale: 1.1 }}
-    whileInView={{ scale: 7 }}
+    whileInView={{ scale: 5 }}
     transition={{ duration: 1.5 }}
     viewport={{ once: true }}
   >
