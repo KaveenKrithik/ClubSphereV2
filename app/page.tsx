@@ -443,15 +443,17 @@ export default function Home() {
             </motion.div>
             <div className="relative aspect-video overflow-hidden rounded-xl">
               <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 z-10 rounded-xl" />
-              <motion.img
-                initial={{ scale: 1.1 }}
-                whileInView={{ scale: 1 }}
-                transition={{ duration: 1.5 }}
-                viewport={{ once: true }}
-                src="https://placehold.co/600x400/6366f1/ffffff?text=Club+Sphere"
-                alt="Students collaborating"
-                className="object-cover w-full h-full"
-              />
+              <div className="w-full h-full flex items-center justify-center">
+   <motion.div
+    initial={{ scale: 1.1 }}
+    whileInView={{ scale: 7 }}
+    transition={{ duration: 1.5 }}
+    viewport={{ once: true }}
+  >
+    <UILogo />
+  </motion.div>
+</div>
+
             </div>
           </div>
         </div>
