@@ -29,13 +29,13 @@ const hackathonEvents = [
   },
   {
     id: "2",
-    title: "HackEra'25",
+    title: "CodeKombat: Inter-college DSA Competition",
     description: "HackEra challenges students to Innovate Beyond Limits, bringing together brilliant minds to develop cutting-edge solutions for real-world industry challenges",
-    date: "April 11, 2025",
-    venue: "Sathyabama Institute of Science and Technology, Chennai, Tamil Nadu, India",
-    image: "/sathya.jpeg",
+    date: "April 16, 2025",
+    venue: "Ramanujan College",
+    image: "/code.webp",
     isExternal: true,
-    enrollmentLink: "https://unstop.com/hackathons/hackera25-sathyabama-institute-of-science-and-technology-1451131",
+    enrollmentLink: "https://unstop.com/hackathons/codekombat-inter-college-dsa-competition-educen-ramanujan-college-1462826?rstatus=1",
   },
   {
     id: "3",
@@ -73,13 +73,13 @@ const hackathonEvents = [
 const workshopEvents = [
   {
     id: "w1",
-    title: "SAMHITA '25",
-    description: "GEN AI, DATA SCIENCE, IT IN DRONE TECHNOLOGY, MERN STACK, CLOUD AND DATA MANAGEMENT",
-    date: "April 12, 2025",
-    venue: "Madras Institute of Technology Anna University",
-    image: "/mit.jpg",
+    title: "ML for Sediment Transport Prediction",
+    description: "Join this interactive, hands-on workshop to discover how machine learning can be applied to predict sediment transport in river systems—a crucial aspect of river engineering, erosion control, and water resource management.",
+    date: "April 18, 2025",
+    venue: "Indian Institute of Technology (IIT), Madras",
+    image: "/ml.jpg",
     isExternal: true,
-    enrollmentLink: "https://samhita25.live/",
+    enrollmentLink: "https://unstop.com/workshops-webinars/ml-for-sediment-transport-prediction-cea-fest-2025-iit-madras-1462206",
   },
   {
     id: "w2",
@@ -113,13 +113,13 @@ const workshopEvents = [
   },
   {
     id: "w5",
-    title: "Tech Sentinal",
-    description: "Learn to deploy and scale applications on Amazon Web Services.",
-    date: "April 11, 2025",
-    venue: "Manipal University Jaipur, Jaipur, Rajasthan, India",
-    image: "https://placehold.co/600x400/6366f1/ffffff?text=Tech+Sentinal",
+    title: "ETABS Workshop",
+    description: "ETABS workshops conducted in institutes focus on training students, engineers, and professionals in using the ETABS software for structural analysis and design.",
+    date: "April 19, 2025",
+    venue: "Indian Institute of Technology (IIT), Madras",
+    image: "/etab.webp",
     isExternal: true,
-    enrollmentLink: "https://unstop.com/competitions/1461961/register",
+    enrollmentLink: "https://unstop.com/competitions/1461603/register",
   },
 ]
 
