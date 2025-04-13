@@ -30,7 +30,7 @@ const hackathonEvents = [
   {
     id: "2",
     title: "CodeKombat: Inter-college DSA Competition",
-    description: "HackEra challenges students to Innovate Beyond Limits, bringing together brilliant minds to develop cutting-edge solutions for real-world industry challenges",
+    description: "Inter-college DSA competition",
     date: "April 16, 2025",
     venue: "Ramanujan College",
     image: "/code.webp",
