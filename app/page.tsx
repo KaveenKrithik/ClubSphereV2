@@ -20,7 +20,7 @@ const hackathonEvents = [
 
   {
     id: "1",
-    title: "MOZOHACK 5.0",
+    title: "MOZOHACK 6.0",
     description: "Continuing the legacy of our past iterations, we have come back with even more grit, more challenge and most of all more fun. SRMKZILLA invites you to the most anticipated hackathon of the year - MOZOHACK 5.0",
     date: "April 21-22, 2025",
     venue: "DEI Hall, BEL, 5th Floor, SRMIST",
