@@ -17,8 +17,19 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
 // Event data
 const hackathonEvents = [
+
   {
     id: "1",
+    title: "MOZOHACK 5.0",
+    description: "Continuing the legacy of our past iterations, we have come back with even more grit, more challenge and most of all more fun. SRMKZILLA invites you to the most anticipated hackathon of the year - MOZOHACK 5.0",
+    date: "April 21-22, 2025",
+    venue: "DEI Hall, BEL, 5th Floor, SRMIST",
+    image: "/mozo.png",
+    isExternal: false,
+    enrollmentLink: "https://unstop.com/competitions/1462739/register",
+  },
+  {
+    id: "2",
     title: "AI Agents Hackathon 2025",
     description: "FREE three-week virtual hackathon is your chance to dive deep into AI agent development.",
     date: "April 8-30, 2025",
@@ -28,7 +39,7 @@ const hackathonEvents = [
     enrollmentLink: "https://microsoft.github.io/AI_Agents_Hackathon/",
   },
   {
-    id: "2",
+    id: "3",
     title: "CodeKombat: Inter-college DSA Competition",
     description: "Inter-college DSA competition",
     date: "April 16, 2025",
@@ -38,7 +49,7 @@ const hackathonEvents = [
     enrollmentLink: "https://unstop.com/hackathons/codekombat-inter-college-dsa-competition-educen-ramanujan-college-1462826?rstatus=1",
   },
   {
-    id: "3",
+    id: "4",
     title: "TDX Hackathon",
     description: "Join your fellow participants for a fun kick-off event",
     date: "April 29-30, 2025",
@@ -48,7 +59,7 @@ const hackathonEvents = [
     enrollmentLink: "https://www.salesforce.com/in/tdx/hackathon/",
   },
   {
-    id: "4",
+    id: "5",
     title: "Query Quest",
     description: "A Database Competition",
     date: "April 21, 2025",
@@ -58,7 +69,7 @@ const hackathonEvents = [
     enrollmentLink: "https://docs.google.com/forms/d/e/1FAIpQLSfEG6ojVugz983BggioQGGJNj2Xa_9zjYfG0TZm27-FqQpaNw/viewform",
   },
   {
-    id: "5",
+    id: "6",
     title: "Hack Gear 1.0",
     description: "A Tech Innovation Hackathon on AI, Blockchain, Cybersecurity & Web.",
     date: "April 30, 2025",
