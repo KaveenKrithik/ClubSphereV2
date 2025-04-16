@@ -141,7 +141,7 @@ const workshopEvents = [
     venue: "SRMIST, Kattankulathur",
     image: "/innovatrix.jpg",
     isExternal: false,
-    enrollmentLink: "https://unstop.com/competitions/1461603/register",
+    enrollmentLink: "https://sites.google.com/srmist.edu.in/techxplore-2025/home",
   },
 ]
 
