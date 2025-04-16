@@ -132,6 +132,17 @@ const workshopEvents = [
     isExternal: true,
     enrollmentLink: "https://unstop.com/competitions/1461603/register",
   },
+
+  {
+    id: "w6",
+    title: "Innovatex’25",
+    description: " National Level Technical Symposium ",
+    date: "April 22-23, 2025",
+    venue: "SRMIST, Kattankulathur",
+    image: "/innovatrix.jpg",
+    isExternal: false,
+    enrollmentLink: "https://unstop.com/competitions/1461603/register",
+  },
 ]
 
 const clubsData = [
