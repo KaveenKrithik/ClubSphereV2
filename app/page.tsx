@@ -208,6 +208,15 @@ const clubsData = [
     logo: "/qccs.jpg",
     enrollmentLink: "https://www.sqcc.xyz/",
   },
+  {
+    id: "c9",
+    name: "SRM ACM SIGAI",
+    description: "We're a student-led chapter fostering an active AI community. oin us to explore, innovate, and share in advancing AI through events, projects, and collaborations that offer valuable learning and growth opportunities.",
+    memberCount: 55,
+    foundedYear: 2021,
+    logo: "/acm.jpg",
+    enrollmentLink: "https://srm-acm-sigai.vercel.app/",
+  },
 
   
 ]
