@@ -20,13 +20,13 @@ const hackathonEvents = [
 
   {
     id: "1",
-    title: "MOZOHACK 6.0",
-    description: "Continuing the legacy of our past iterations, we have come back with even more grit, more challenge and most of all more fun. SRMKZILLA invites you to the most anticipated hackathon of the year - MOZOHACK 5.0",
-    date: "April 21-22, 2025",
-    venue: "DEI Hall, BEL, 5th Floor, SRMIST",
+    title: "Hack2TechSustain 2.0",
+    description: "National Level Generative Media Hackathon on AI for Sustainability & Social Good",
+    date: "August 11-26, 2025",
+    venue: "Department of Computer Technology, Madras Institute of Technology Campus, Anna University, Chromepet, Chennai, Tamil Nadu, India",
     image: "/mozo.png",
-    isExternal: false,
-    enrollmentLink: "https://unstop.com/competitions/1462739/register",
+    isExternal: true,
+    enrollmentLink: "https://unstop.com/competitions/1537998/register",
   },
   {
     id: "2",
