@@ -20,13 +20,13 @@ const hackathonEvents = [
 
   {
     id: "1",
-    title: "Hack2TechSustain 2.0",
-    description: "National Level Generative Media Hackathon on AI for Sustainability & Social Good",
-    date: "August 11-26, 2025",
-    venue: "Department of Computer Technology, Madras Institute of Technology Campus, Anna University, Chromepet.",
-    image: "/mit.webp",
+    title: "IoTAlliance Recruitments 2025",
+    description: "IoTAlliance Space Station is recruiting new crew members across three critical domains.",
+    date: "September 1-10, 2025",
+    venue: "SRMIST",
+    image: "/rec.jpeg",
     isExternal: true,
-    enrollmentLink: "https://unstop.com/competitions/1537998/register",
+    enrollmentLink: "https://iota-recruitment-web.vercel.app/",
   },
   {
     id: "2",
@@ -38,15 +38,15 @@ const hackathonEvents = [
     isExternal: true,
     enrollmentLink: "https://unstop.com/competitions/1533773/register",
   },
-  {
+    {
     id: "3",
-    title: "Startup-Hackathon",
-    description: "In this hackathon, TIC provides the startup ideas, and you bring them to life.",
-    date: "August 16, 2025",
-    venue: "Virtual Event",
-    image: "/tic.jpeg",
+    title: "IoTAlliance Recruitments 2025",
+    description: "IoTAlliance Space Station is recruiting new crew members across three critical domains.",
+    date: "September 1-10, 2025",
+    venue: "SRMIST",
+    image: "/rec.jpeg",
     isExternal: true,
-    enrollmentLink: "https://unstop.com/competitions/1538091/register",
+    enrollmentLink: "https://iota-recruitment-web.vercel.app/",
   },
   {
     id: "4",
