@@ -39,13 +39,28 @@ export function EventCalendar({ events, children }: EventCalendarProps) {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
+
   // Convert string dates to Date objects for comparison
   const eventDates = events.map((event) => {
-    const dateParts = event.date.split("-")[0].trim().split(" ")[1].split(",")[0]
-    const month = new Date(Date.parse(event.date.split("-")[0].trim().split(" ")[0] + " 1, 2025")).getMonth()
+    let dateObj: Date;
+    try {
+      // Try to parse the date string directly
+      // If it's a range like "Sept 1-10, 2025", we take the first part
+      const firstPart = event.date.split('-')[0].trim();
+      dateObj = new Date(firstPart);
+      
+      // If parsing failed (Invalid Date), try some common formats
+      if (isNaN(dateObj.getTime())) {
+          // If it still fails, default to today or a visible date
+          dateObj = new Date();
+      }
+    } catch (e) {
+      dateObj = new Date();
+    }
+    
     return {
       ...event,
-      dateObj: new Date(2025, month, Number.parseInt(dateParts)),
+      dateObj,
     }
   })
 

@@ -16,145 +16,8 @@ import { motion } from "framer-motion"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
 // Event data
-const hackathonEvents = [
 
-  {
-    id: "1",
-    title: "IoTAlliance Recruitments 2025",
-    description: "IoTAlliance Space Station is recruiting new crew members across three critical domains.",
-    date: "September 1-10, 2025",
-    venue: "SRMIST",
-    image: "/rec.jpeg",
-    isExternal: true,
-    enrollmentLink: "https://iota-recruitment-web.vercel.app/",
-  },
-  {
-    id: "2",
-    title: "Postman Notebooks Challenge",
-    description: "Postman Notebooks Challenge",
-    date: "September 1-8, 2025",
-    venue: "Virtual Event",
-    image: "/bits.png",
-    isExternal: true,
-    enrollmentLink: "https://unstop.com/competitions/1533773/register",
-  },
-    {
-    id: "3",
-    title: "IoTAlliance Recruitments 2025",
-    description: "IoTAlliance Space Station is recruiting new crew members across three critical domains.",
-    date: "September 1-10, 2025",
-    venue: "SRMIST",
-    image: "/rec.jpeg",
-    isExternal: true,
-    enrollmentLink: "https://iota-recruitment-web.vercel.app/",
-  },
-  {
-    id: "4",
-    title: "Gen AI Exchange Hackathon",
-    description: "The Gen AI Exchange Hackathon, second phase of Gen AI Exchange Program, is inviting all innovators, developers, IT practitioners and startups to leverage Google Cloud's cutting-edge AI technology and directly impact India's future by solving real-world problems.",
-    date: "September 5, 2025",
-    venue: "Virtual Event",
-    image: "/gen.png",
-    isExternal: true,
-    enrollmentLink: "https://vision.hack2skill.com/event/genaiexchangehackathon?utm_source=hack2skill&utm_medium=homepage",
-  },
-  {
-    id: "5",
-    title: "SuperHack 2025",
-    description: "Join SuperHack, the global AI hackathon for developers powering the next wave of IT. Designed for you — the innovators, AI engineers, MSP and IT developers.",
-    date: "September 10, 2025",
-    venue: "Virtual event",
-    image: "/sup.webp",
-    isExternal: true,
-    enrollmentLink: "https://vision.hack2skill.com/event/superhack2025/registration?utm_source=hack2skill&utm_medium=homepage",
-  },
-  {
-    id: "6",
-    title: "National Level Project Competition 2025",
-    description: "A Database Competition",
-    date: "August 22-23, 2025",
-    venue: "Velammal Institute of Technology",
-    image: "/vel.jpg",
-    isExternal: true,
-    enrollmentLink: "https://docs.google.com/forms/d/e/1FAIpQLSdA9Ux2V1WYnnA-vIeqT-mH81Ts3dFV1ZNsbT9ACEhcYAIFdA/viewform",
-  },
-  {
-    id: "7",
-    title: "SMART PAPER_SHREDDER HACKATHON 2025",
-    description: "Development of Working Model",
-    date: "September 15, 2025",
-    venue: "SRM Institute of Science and Technology Kattankulathur Campus",
-    image: "/smart.png",
-    isExternal: false,
-    enrollmentLink: "https://docs.google.com/forms/d/e/1FAIpQLScuy77yVpCfcjqogbSbl3ZS3vopF97i4o5cZiu6PjYV748J1Q/viewform",
-  },
- 
-]
-
-const workshopEvents = [
-  {
-    id: "w1",
-    title: "One-day Training cum Workshop on Biomass Fermentation and Distillation for Bioethanol Production 2025",
-    description: "Hands-on training on Separation of Lignin, Cellulose and Hemi Cellulose. Biomass fermentation and distillation Alcohol detection, Center for Waste Management laboratory facilities visit",
-    date: "August 18, 2025",
-    venue: "Sathyabama Institute of Science and Technology, Chennai",
-    image: "/bio.jpg",
-    isExternal: true,
-    enrollmentLink: "https://docs.google.com/forms/d/1hiZ2ZCC6pZuULj4wrlw6poHpC3VLNtxtAs8RhYNlIF4/viewform?edit_requested=true",
-  },
-  {
-    id: "w2",
-    title: "Hack & Beyond 2025",
-    description: "The event aims to provide participants with in-depth knowledge and practical insights into Automotive Embedded Systems and AI-powered Embedded Solutions, with a particular emphasis on intelligent edge applications across healthcare, fitness, and industrial domains.",
-    date: "August 11-14, 2025",
-    venue: "SRM Institute of Science and Technology Kattankulathur Campus",
-    image: "/hack.jpeg",
-    isExternal: false,
-    enrollmentLink: "https://docs.google.com/forms/d/e/1FAIpQLScAEzF1r7pJmBicPGLFT6No_jpW95y4Ec_LaOFeHmyJjAUNAQ/closedform?pli=1",
-  },
-  {
-    id: "w3",
-    title: "Two Days All India Workshop on Energy Sphere : IOT powered smart grids for Sustainable Cities and Green Power 2025",
-    description: "BS Abdur Rahman Crescent Institute of Science and Technology",
-    date: "August 29-30, 2025",
-    venue: " BS Abdur Rahman Crescent Institute of Science and Technology",
-    image: "/cres.png",
-    isExternal: true,
-    enrollmentLink: "https://crescent.education/",
-  },
-  {
-    id: "w4",
-    title: "IoT and Embedded System Workshop 2025",
-    description: "Understanding IoT and Embedded system fundamentals.",
-    date: "August 30, 2025",
-    venue: "IIT Madras, Research Park",
-    image: "top.jpeg",
-    isExternal: true,
-    enrollmentLink: "https://pages.razorpay.com/pl_Qt1iU1xhftJ2k7/view",
-  },
-  {
-    id: "w5",
-    title: "IoT Automation using Raspberry Pi & Node-red Workshop 2025",
-    description: "Top Engineers",
-    date: "August 23, 2025",
-    venue: "Indian Institute of Technology (IIT), Madras",
-    image: "/iot.jpeg",
-    isExternal: true,
-    enrollmentLink: "https://pages.razorpay.com/pl_Qt1UNWOJWGrIlH/view",
-  },
-
-  {
-    id: "w6",
-    title: "Digital Twin Workshop 2025",
-    description: " Top Engineers ",
-    date: "August 24, 2025",
-    venue: "IIT Madras, Research Park",
-    image: "/iitm.jpeg",
-    isExternal: true,
-    enrollmentLink: "https://pages.razorpay.com/pl_QtPs47oh1aOqjc/view",
-  },
-]
-
+// Clubs data remains static as requested
 const clubsData = [
   {
     id: "c1",
@@ -238,23 +101,36 @@ const clubsData = [
     logo: "/acm.jpg",
     enrollmentLink: "https://srm-acm-sigai.vercel.app/",
   },
-
-  
 ]
 
-// Combine all events for the calendar
-const allEvents = [...hackathonEvents, ...workshopEvents]
+
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
+  const [hackathonEvents, setHackathonEvents] = useState<any[]>([])
+  const [workshopEvents, setWorkshopEvents] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     setMounted(true)
+    const fetchEvents = async () => {
+      try {
+        const res = await fetch('/api/events')
+        const data = await res.json()
+        setHackathonEvents(data.hackathons)
+        setWorkshopEvents(data.workshops)
+      } catch (err) {
+        console.error('Failed to fetch events:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchEvents()
   }, [])
 
-  if (!mounted) {
-    return null
-  }
+  if (!mounted) return null
+
+  const allEvents = [...hackathonEvents, ...workshopEvents]
 
   return (
     <div className="min-h-screen bg-background">

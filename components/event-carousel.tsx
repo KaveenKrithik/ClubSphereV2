@@ -40,6 +40,11 @@ export function EventCarousel({ events }: EventCarouselProps) {
                     src={event.image || "https://placehold.co/600x400/e2e8f0/1e293b?text=Event+Poster"}
                     alt={event.title}
                     className="h-full w-full object-cover transition-all hover:scale-105 duration-500"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.onerror = null;
+                      target.src = `https://placehold.co/600x400/1e293b/e2e8f0?text=${encodeURIComponent(event.title.substring(0, 30))}`;
+                    }}
                   />
                   {event.isExternal && (
                     <Badge variant="secondary" className="absolute top-2 right-2 flex items-center gap-1">
