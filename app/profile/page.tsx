@@ -3,7 +3,7 @@
 import { useAuth } from "@/components/auth-provider"
 import { redirect } from "next/navigation"
 import { motion } from "framer-motion"
-import { Calendar, ArrowLeft, LogOut, User as UserIcon, Mail, Shield, Clock } from "lucide-react"
+import { Calendar, ArrowLeft, LogOut, User as UserIcon, Mail, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
@@ -63,10 +63,8 @@ export default function ProfilePage() {
             </div>
             <div className="space-y-2 flex-1">
               <h1 className="text-4xl font-bold tracking-tight">Account Settings</h1>
-              <p className="text-muted-foreground">Manage your account information and view your activity.</p>
               <div className="flex flex-wrap gap-2 pt-2">
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-primary/5 text-primary border-primary/20">Active User</span>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-secondary/5 text-secondary border-secondary/20 font-mono text-[10px]">ID: {user.id.substring(0, 8)}...</span>
               </div>
             </div>
           </section>
@@ -91,13 +89,6 @@ export default function ProfilePage() {
                   <div className="flex flex-col">
                     <span className="text-[10px] uppercase text-muted-foreground font-bold tracking-wider">Member Since</span>
                     <span className="text-sm font-medium">{joinedDate}</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-                  <Shield className="h-4 w-4 text-muted-foreground" />
-                  <div className="flex flex-col">
-                    <span className="text-[10px] uppercase text-muted-foreground font-bold tracking-wider">Account Status</span>
-                    <span className="text-sm font-medium">Verified via Google</span>
                   </div>
                 </div>
               </CardContent>

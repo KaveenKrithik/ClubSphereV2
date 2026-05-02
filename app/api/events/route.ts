@@ -26,135 +26,6 @@ function filterActive(events: any[]): any[] {
 }
 
 // ==========================================
-// YOUR ORIGINAL BASE EVENTS
-// ==========================================
-const BASE_HACKATHONS = [
-  {
-    id: "h1",
-    title: "IoTAlliance Recruitments 2026",
-    description: "IoTAlliance Space Station is recruiting new crew members across three critical domains.",
-    date: "September 1, 2026",
-    venue: "SRMIST",
-    image: "/rec.jpeg",
-    isExternal: true,
-    enrollmentLink: "https://iota-recruitment-web.vercel.app/",
-  },
-  {
-    id: "h2",
-    title: "Postman Notebooks Challenge",
-    description: "Postman Notebooks Challenge - API Innovation.",
-    date: "September 1, 2026",
-    venue: "Virtual Event",
-    image: "/bits.png",
-    isExternal: true,
-    enrollmentLink: "https://unstop.com/competitions/1533773/register",
-  },
-  {
-    id: "h3",
-    title: "SuperHack 2026",
-    description: "Join SuperHack, the global AI hackathon for developers powering the next wave of IT.",
-    date: "September 10, 2026",
-    venue: "Virtual Event",
-    image: "/sup.webp",
-    isExternal: true,
-    enrollmentLink: "https://vision.hack2skill.com/event/superhack2026/registration",
-  },
-  {
-    id: "h4",
-    title: "SMART PAPER_SHREDDER HACKATHON 2026",
-    description: "Development of Working Model",
-    date: "September 15, 2026",
-    venue: "SRM Institute of Science and Technology Kattankulathur Campus",
-    image: "/smart.png",
-    isExternal: false,
-    enrollmentLink: "https://docs.google.com/forms/d/e/1FAIpQLScuy77yVpCfcjqogbSbl3ZS3vopF97i4o5cZiu6PjYV748J1Q/viewform",
-  },
-  {
-    id: "h5",
-    title: "Global Tech Innovators Hackathon",
-    description: "Build the future of technology in this 48-hour global competition.",
-    date: "October 5, 2026",
-    venue: "Virtual",
-    image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1000",
-    isExternal: true,
-    enrollmentLink: "#",
-  },
-  {
-    id: "h6",
-    title: "Green Earth Hack 2026",
-    description: "Develop sustainable solutions for a greener planet.",
-    date: "October 12, 2026",
-    venue: "SRMIST",
-    image: "https://images.unsplash.com/photo-1542601906990-b4d3fb773b09?q=80&w=1000",
-    isExternal: false,
-    enrollmentLink: "#",
-  },
-  {
-    id: "h7",
-    title: "FinTech Revolution",
-    description: "Reimagining the world of finance with blockchain and AI.",
-    date: "October 20, 2026",
-    venue: "Virtual",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000",
-    isExternal: true,
-    enrollmentLink: "#",
-  },
-  {
-    id: "h8",
-    title: "HealthTech Challenge",
-    description: "Innovate in the healthcare space with cutting-edge technology.",
-    date: "November 1, 2026",
-    venue: "Chennai",
-    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1000",
-    isExternal: true,
-    enrollmentLink: "#",
-  }
-];
-
-const BASE_WORKSHOPS = [
-  {
-    id: "w1",
-    title: "Biomass Fermentation Workshop 2026",
-    description: "Hands-on training on Separation of Lignin, Cellulose and Hemi Cellulose.",
-    date: "August 18, 2026",
-    venue: "Sathyabama Institute of Science and Technology, Chennai",
-    image: "/bio.jpg",
-    isExternal: true,
-    enrollmentLink: "https://docs.google.com/forms/d/1hiZ2ZCC6pZuULj4wrlw6poHpC3VLNtxtAs8RhYNlIF4/viewform",
-  },
-  {
-    id: "w2",
-    title: "Hack & Beyond 2026",
-    description: "Automotive Embedded Systems and AI-powered Embedded Solutions.",
-    date: "August 11, 2026",
-    venue: "SRM Institute of Science and Technology Kattankulathur Campus",
-    image: "/hack.jpeg",
-    isExternal: false,
-    enrollmentLink: "https://docs.google.com/forms/d/e/1FAIpQLScAEzF1r7pJmBicPGLFT6No_jpW95y4Ec_LaOFeHmyJjAUNAQ/closedform",
-  },
-  {
-    id: "w3",
-    title: "IoT and Embedded System Workshop 2026",
-    description: "Understanding IoT and Embedded system fundamentals.",
-    date: "August 30, 2026",
-    venue: "IIT Madras, Research Park",
-    image: "/top.jpeg",
-    isExternal: true,
-    enrollmentLink: "https://pages.razorpay.com/pl_Qt1iU1xhftJ2k7/view",
-  },
-  {
-    id: "w4",
-    title: "Digital Twin Workshop 2026",
-    description: "Top Engineers Workshop on Digital Twins and IoT",
-    date: "August 24, 2026",
-    venue: "IIT Madras, Research Park",
-    image: "/iitm.jpeg",
-    isExternal: true,
-    enrollmentLink: "https://pages.razorpay.com/pl_QtPs47oh1aOqjc/view",
-  }
-];
-
-// ==========================================
 // UNSTOP SCRAPER
 // Fetches both hackathons AND workshops
 // ==========================================
@@ -207,10 +78,10 @@ async function fetchUnstop(): Promise<{ hackathons: any[]; workshops: any[] }> {
     // Split by type
     const hackathons = items.filter((i: any) =>
       i._type === 'hackathons' || i._subtype === 'online_coding_challenge'
-    ).slice(0, 15);
+    ).slice(0, 20); // Increased limit slightly for dynamic content
     const workshops = items.filter((i: any) =>
       i._type === 'workshops' || i._subtype === 'workshops' || i._subtype === 'webinars'
-    ).slice(0, 15);
+    ).slice(0, 20);
 
     // Clean up internal fields
     const clean = (arr: any[]) => arr.map(({ _type, _subtype, ...rest }) => rest);
@@ -227,11 +98,6 @@ async function fetchUnstop(): Promise<{ hackathons: any[]; workshops: any[] }> {
 // based on badge/category
 // ==========================================
 const HACKATHON_BADGES = ['hackathon'];
-const WORKSHOP_BADGES = [
-  'faculty development program', 'workshop', 'conference',
-  'international conference', 'summer internship program',
-  'internship training', 'symposium', 'seminar', 'fdp',
-];
 
 function parseKnowAFestCard(link: string, content: string): any | null {
   const imgMatch = content.match(/src="([^"]+)"/);
@@ -297,12 +163,12 @@ async function fetchKnowAFest(): Promise<{ hackathons: any[]; workshops: any[] }
       const { _badge, ...event } = parsed;
 
       if (HACKATHON_BADGES.some(b => _badge.includes(b))) {
-        if (hackathons.length < 15) {
+        if (hackathons.length < 20) {
           hackathons.push({ id: `kf-h-${hackathons.length}`, ...event });
         }
       } else {
         // Everything else goes to workshops
-        if (workshops.length < 15) {
+        if (workshops.length < 20) {
           workshops.push({ id: `kf-w-${workshops.length}`, ...event });
         }
       }
@@ -327,9 +193,9 @@ export async function GET() {
   const unstop = unstopResult.status === 'fulfilled' ? unstopResult.value : { hackathons: [], workshops: [] };
   const knowafest = knowafestResult.status === 'fulfilled' ? knowafestResult.value : { hackathons: [], workshops: [] };
 
-  // Merge all hackathons and workshops
-  const allHackathons = [...BASE_HACKATHONS, ...unstop.hackathons, ...knowafest.hackathons];
-  const allWorkshops = [...BASE_WORKSHOPS, ...unstop.workshops, ...knowafest.workshops];
+  // Merge only newly fetched hackathons and workshops
+  const allHackathons = [...unstop.hackathons, ...knowafest.hackathons];
+  const allWorkshops = [...unstop.workshops, ...knowafest.workshops];
 
   // Filter out expired events
   const activeHackathons = filterActive(allHackathons);
