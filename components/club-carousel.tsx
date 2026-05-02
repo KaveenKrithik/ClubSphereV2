@@ -4,6 +4,8 @@ import { Users, Calendar } from "lucide-react"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import Autoplay from "embla-carousel-autoplay"
+import * as React from "react"
 
 interface Club {
   id: string
@@ -26,11 +28,17 @@ export function ClubCarousel({ clubs }: ClubCarouselProps) {
         align: "start",
         loop: true,
       }}
+      plugins={[
+        Autoplay({
+          delay: 4000,
+          stopOnInteraction: false,
+        }),
+      ]}
       className="w-full"
     >
       <CarouselContent className="-ml-4">
         {clubs.map((club) => (
-          <CarouselItem key={club.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+          <CarouselItem key={club.id} className="pl-4 md:basis-1/2 lg:basis-1/4">
             <Card className="h-full flex flex-col">
               <CardHeader className="flex flex-col items-center text-center p-6">
                 <div className="w-24 h-24 rounded-full overflow-hidden mb-4 bg-muted flex items-center justify-center">
@@ -64,8 +72,8 @@ export function ClubCarousel({ clubs }: ClubCarouselProps) {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious className="left-2" />
-      <CarouselNext className="right-2" />
+      <CarouselPrevious className="hidden md:flex -left-4 lg:-left-12" />
+      <CarouselNext className="hidden md:flex -right-4 lg:-right-12" />
     </Carousel>
   )
 }

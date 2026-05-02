@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Calendar, Users, Code, BookOpen, Menu } from "lucide-react"
+import { Calendar, Users, Code, BookOpen, Menu, User as UserIcon, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { ModeToggle } from "@/components/mode-toggle"
 import { EventCarousel } from "@/components/event-carousel"
 import { ClubCarousel } from "@/components/club-carousel"
@@ -14,6 +15,8 @@ import { AnimatedCard, CardContent, CardHeader, CardTitle } from "@/components/a
 import { EventCalendar } from "@/components/event-calendar"
 import { motion } from "framer-motion"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { useAuth } from "@/components/auth-provider"
+import { signOut } from "@/app/auth/actions"
 
 // Event data
 
@@ -110,6 +113,9 @@ export default function Home() {
   const [hackathonEvents, setHackathonEvents] = useState<any[]>([])
   const [workshopEvents, setWorkshopEvents] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const { user, loading: authLoading } = useAuth()
+  const [hackathonSearch, setHackathonSearch] = useState("")
+  const [workshopSearch, setWorkshopSearch] = useState("")
 
   useEffect(() => {
     setMounted(true)
@@ -130,6 +136,16 @@ export default function Home() {
 
   if (!mounted) return null
 
+  const filteredHackathons = hackathonEvents.filter(event => 
+    event.title.toLowerCase().includes(hackathonSearch.toLowerCase()) ||
+    event.description.toLowerCase().includes(hackathonSearch.toLowerCase())
+  )
+
+  const filteredWorkshops = workshopEvents.filter(event => 
+    event.title.toLowerCase().includes(workshopSearch.toLowerCase()) ||
+    event.description.toLowerCase().includes(workshopSearch.toLowerCase())
+  )
+
   const allEvents = [...hackathonEvents, ...workshopEvents]
 
   return (
@@ -138,7 +154,7 @@ export default function Home() {
 
       {/* Header */}
       <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between">
+        <div className="container px-4 md:px-6 flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <UILogo />
             <span className="text-xl font-bold">ClubSphere</span>
@@ -166,9 +182,23 @@ export default function Home() {
           </nav>
           <div className="flex items-center gap-4">
             <ModeToggle />
-            <Button asChild className="hidden md:inline-flex">
-              <Link href="/sign-in">Sign In</Link>
-            </Button>
+            {user ? (
+              <div className="flex items-center gap-2">
+                <Button asChild variant="outline" className="hidden md:inline-flex gap-2">
+                  <Link href="/profile">
+                    <UserIcon className="h-4 w-4" />
+                    Profile
+                  </Link>
+                </Button>
+                <Button onClick={() => signOut()} variant="ghost" className="hidden md:inline-flex">
+                  Sign Out
+                </Button>
+              </div>
+            ) : (
+              <Button asChild className="hidden md:inline-flex">
+                <Link href="/sign-in">Sign In</Link>
+              </Button>
+            )}
 
             {/* Mobile Menu */}
             <Sheet>
@@ -192,9 +222,23 @@ export default function Home() {
                   <Link href="#about" className="text-lg font-medium">
                     About
                   </Link>
-                  <Button asChild className="mt-4">
-                    <Link href="/sign-in">Sign In</Link>
-                  </Button>
+                  {user ? (
+                    <>
+                      <Button asChild variant="outline" className="mt-4 gap-2">
+                        <Link href="/profile">
+                          <UserIcon className="h-4 w-4" />
+                          My Profile
+                        </Link>
+                      </Button>
+                      <Button onClick={() => signOut()} variant="ghost" className="mt-2">
+                        Sign Out
+                      </Button>
+                    </>
+                  ) : (
+                    <Button asChild className="mt-4">
+                      <Link href="/sign-in">Sign In</Link>
+                    </Button>
+                  )}
                 </div>
               </SheetContent>
             </Sheet>
@@ -223,7 +267,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="flex flex-wrap justify-center gap-4"
+              className="flex flex-col sm:flex-row justify-center gap-4 w-full sm:w-auto"
             >
               <EventCalendar events={allEvents}>
                 <Button size="lg" className="group">
@@ -264,8 +308,26 @@ export default function Home() {
                 Discover exciting hackathons happening on campus and around the world.
               </p>
             </motion.div>
+            <div className="w-full max-w-sm mb-4">
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search hackathons..."
+                  className="pl-8"
+                  value={hackathonSearch}
+                  onChange={(e) => setHackathonSearch(e.target.value)}
+                />
+              </div>
+            </div>
             <div className="w-full">
-              <EventCarousel events={hackathonEvents} />
+              {filteredHackathons.length > 0 ? (
+                <EventCarousel events={filteredHackathons} />
+              ) : (
+                <div className="py-12 text-center border-2 border-dashed rounded-xl">
+                  <p className="text-muted-foreground">No hackathons found matching "{hackathonSearch}"</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -287,8 +349,26 @@ export default function Home() {
                 Enhance your skills with hands-on workshops led by industry experts.
               </p>
             </motion.div>
+            <div className="w-full max-w-sm mb-4">
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search workshops..."
+                  className="pl-8"
+                  value={workshopSearch}
+                  onChange={(e) => setWorkshopSearch(e.target.value)}
+                />
+              </div>
+            </div>
             <div className="w-full">
-              <EventCarousel events={workshopEvents} />
+              {filteredWorkshops.length > 0 ? (
+                <EventCarousel events={filteredWorkshops} />
+              ) : (
+                <div className="py-12 text-center border-2 border-dashed rounded-xl">
+                  <p className="text-muted-foreground">No workshops found matching "{workshopSearch}"</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -479,7 +559,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t py-6 md:py-0">
-        <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+        <div className="container px-4 md:px-6 flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
           <div className="flex items-center gap-2">
             <UILogo />
             <span className="font-semibold">ClubSphere</span>

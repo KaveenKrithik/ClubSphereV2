@@ -5,6 +5,8 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import Autoplay from "embla-carousel-autoplay"
+import * as React from "react"
 
 interface Event {
   id: string
@@ -28,11 +30,17 @@ export function EventCarousel({ events }: EventCarouselProps) {
         align: "start",
         loop: true,
       }}
+      plugins={[
+        Autoplay({
+          delay: 4000,
+          stopOnInteraction: false,
+        }),
+      ]}
       className="w-full"
     >
       <CarouselContent className="-ml-4">
         {events.map((event) => (
-          <CarouselItem key={event.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+          <CarouselItem key={event.id} className="pl-4 md:basis-1/2 lg:basis-1/4">
             <Card className="h-full flex flex-col">
               <CardHeader className="p-0">
                 <div className="relative h-48 w-full overflow-hidden rounded-t-lg bg-muted flex items-center justify-center">
@@ -77,8 +85,8 @@ export function EventCarousel({ events }: EventCarouselProps) {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious className="left-2" />
-      <CarouselNext className="right-2" />
+      <CarouselPrevious className="hidden md:flex -left-4 lg:-left-12" />
+      <CarouselNext className="hidden md:flex -right-4 lg:-right-12" />
     </Carousel>
   )
 }
