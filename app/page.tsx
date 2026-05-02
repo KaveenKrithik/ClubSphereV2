@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Calendar, Users, Code, BookOpen, Menu, User as UserIcon, Search } from "lucide-react"
+import { Calendar, Users, Code, BookOpen, Menu, User as UserIcon, Search, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ModeToggle } from "@/components/mode-toggle"
@@ -16,8 +16,6 @@ import { EventCalendar } from "@/components/event-calendar"
 import { motion } from "framer-motion"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useAuth } from "@/components/auth-provider"
-
-// Event data
 
 // Clubs data remains static as requested
 const clubsData = [
@@ -105,8 +103,6 @@ const clubsData = [
   },
 ]
 
-
-
 export default function Home() {
   const [mounted, setMounted] = useState(false)
   const [hackathonEvents, setHackathonEvents] = useState<any[]>([])
@@ -146,6 +142,28 @@ export default function Home() {
   )
 
   const allEvents = [...hackathonEvents, ...workshopEvents]
+
+  const LoadingThrobber = () => (
+    <div className="w-full py-20 flex flex-col items-center justify-center gap-4">
+      <motion.div
+        animate={{ 
+          scale: [1, 1.2, 1],
+          opacity: [0.5, 1, 0.5]
+        }}
+        transition={{ 
+          duration: 2, 
+          repeat: Infinity, 
+          ease: "easeInOut" 
+        }}
+      >
+        <UILogo />
+      </motion.div>
+      <div className="flex items-center gap-2 text-muted-foreground animate-pulse">
+        <Loader2 className="h-4 w-4 animate-spin" />
+        <span className="text-sm font-medium">Fetching latest events...</span>
+      </div>
+    </div>
+  )
 
   return (
     <div className="min-h-screen bg-background">
@@ -319,11 +337,13 @@ export default function Home() {
                 />
               </div>
             </div>
-            <div className="w-full">
-              {filteredHackathons.length > 0 ? (
+            <div className="w-full min-h-[300px] flex items-center">
+              {loading ? (
+                <LoadingThrobber />
+              ) : filteredHackathons.length > 0 ? (
                 <EventCarousel events={filteredHackathons} />
               ) : (
-                <div className="py-12 text-center border-2 border-dashed rounded-xl">
+                <div className="w-full py-12 text-center border-2 border-dashed rounded-xl">
                   <p className="text-muted-foreground">No hackathons found matching "{hackathonSearch}"</p>
                 </div>
               )}
@@ -360,11 +380,13 @@ export default function Home() {
                 />
               </div>
             </div>
-            <div className="w-full">
-              {filteredWorkshops.length > 0 ? (
+            <div className="w-full min-h-[300px] flex items-center">
+              {loading ? (
+                <LoadingThrobber />
+              ) : filteredWorkshops.length > 0 ? (
                 <EventCarousel events={filteredWorkshops} />
               ) : (
-                <div className="py-12 text-center border-2 border-dashed rounded-xl">
+                <div className="w-full py-12 text-center border-2 border-dashed rounded-xl">
                   <p className="text-muted-foreground">No workshops found matching "{workshopSearch}"</p>
                 </div>
               )}
@@ -576,8 +598,4 @@ export default function Home() {
       </footer>
     </div>
   )
-  
 }
-
-
-

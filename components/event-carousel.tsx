@@ -78,7 +78,7 @@ export function EventCarousel({ events }: EventCarouselProps) {
               </CardContent>
               <CardFooter className="p-6 pt-0">
                 <Button asChild className="w-full">
-                  <Link href={event.enrollmentLink}>Enroll Now</Link>
+                  <Link href={event.enrollmentLink} target="_blank" rel="noopener noreferrer">Enroll Now</Link>
                 </Button>
               </CardFooter>
             </Card>
