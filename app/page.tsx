@@ -16,7 +16,6 @@ import { EventCalendar } from "@/components/event-calendar"
 import { motion } from "framer-motion"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useAuth } from "@/components/auth-provider"
-import { signOut } from "@/app/auth/actions"
 
 // Event data
 
@@ -113,7 +112,7 @@ export default function Home() {
   const [hackathonEvents, setHackathonEvents] = useState<any[]>([])
   const [workshopEvents, setWorkshopEvents] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const { user, loading: authLoading } = useAuth()
+  const { user, loading: authLoading, signOut } = useAuth()
   const [hackathonSearch, setHackathonSearch] = useState("")
   const [workshopSearch, setWorkshopSearch] = useState("")
 
