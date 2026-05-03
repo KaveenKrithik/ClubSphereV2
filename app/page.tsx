@@ -16,6 +16,7 @@ import { EventCalendar } from "@/components/event-calendar"
 import { motion } from "framer-motion"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useAuth } from "@/components/auth-provider"
+import { SignInPrompt } from "@/components/sign-in-prompt"
 
 // Clubs data remains static as requested
 const clubsData = [
@@ -596,6 +597,7 @@ export default function Home() {
           </p>
         </div>
       </footer>
+      <SignInPrompt />
     </div>
   )
 }
