@@ -3,10 +3,11 @@
 import { useAuth } from "@/components/auth-provider"
 import { redirect } from "next/navigation"
 import { motion } from "framer-motion"
-import { Calendar, ArrowLeft, LogOut, User as UserIcon, Mail, Clock, Bell, CheckCircle2, XCircle } from "lucide-react"
+import { Calendar, ArrowLeft, LogOut, User as UserIcon, Mail, Clock, Bell, CheckCircle2, XCircle, GraduationCap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
+import { Badge } from "@/components/ui/badge"
 import { toast } from "sonner"
 import { useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
@@ -211,6 +212,24 @@ export default function ProfilePage() {
             </Card>
           </div>
 
+          {/* Skill Passport Section */}
+          <section className="space-y-4">
+            <div className="flex items-center justify-between border-b pb-2">
+              <h2 className="text-2xl font-bold flex items-center gap-2">
+                <GraduationCap className="h-6 w-6 text-primary" />
+                Skill Passport
+              </h2>
+              <Badge variant="secondary" className="rounded-full">Lvl 1 Explorer</Badge>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <BadgeCard title="Early Adopter" description="Joined ClubSphere V2" icon="🚀" date={joinedDate} verified />
+              <BadgeCard title="First Enroll" description="Enrolled in an event" icon="✅" disabled />
+              <BadgeCard title="Hackathon Pro" description="Won a campus hackathon" icon="🏆" disabled />
+              <BadgeCard title="Workshop Lead" description="Organized a session" icon="🎙️" disabled />
+            </div>
+          </section>
+
           {/* Detailed History Section */}
           <section className="space-y-4">
             <div className="flex items-center justify-between border-b pb-2">
@@ -231,5 +250,25 @@ export default function ProfilePage() {
         </motion.div>
       </main>
     </div>
+  )
+}
+
+function BadgeCard({ title, description, icon, date, verified, disabled }: any) {
+  return (
+    <Card className={`border-border/50 shadow-sm transition-all overflow-hidden relative ${disabled ? 'opacity-40 grayscale' : 'hover:scale-105 hover:border-primary/30'}`}>
+      <CardContent className="p-4 flex flex-col items-center text-center gap-2">
+        <div className="text-3xl mb-1">{icon}</div>
+        <div className="space-y-1">
+          <h4 className="text-sm font-bold leading-none">{title}</h4>
+          <p className="text-[10px] text-muted-foreground leading-tight">{description}</p>
+        </div>
+        {verified && (
+          <div className="absolute top-2 right-2">
+            <CheckCircle2 className="h-3 w-3 text-primary" />
+          </div>
+        )}
+        {date && <span className="text-[9px] font-medium text-primary/60 mt-1">{date}</span>}
+      </CardContent>
+    </Card>
   )
 }

@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Calendar, Users, Code, BookOpen, Menu, User as UserIcon, Search, Loader2 } from "lucide-react"
+import { Calendar, Users, Code, BookOpen, Menu, User as UserIcon, Search, Loader2, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
 import { ModeToggle } from "@/components/mode-toggle"
 import { EventCarousel } from "@/components/event-carousel"
 import { ClubCarousel } from "@/components/club-carousel"
@@ -19,6 +20,8 @@ import { useAuth } from "@/components/auth-provider"
 import { SignInPrompt } from "@/components/sign-in-prompt"
 import { toast } from "sonner"
 import { AboutModal } from "@/components/about-modal"
+import { CommandMenu } from "@/components/command-menu"
+import { PathfinderModal } from "@/components/pathfinder-modal"
 
 // Clubs data remains static as requested
 const clubsData = [
@@ -232,6 +235,10 @@ export default function Home() {
             </Link>
           </nav>
           <div className="flex items-center gap-4">
+            <CommandMenu />
+            <div className="hidden md:block">
+              <PathfinderModal />
+            </div>
             <ModeToggle />
             {user ? (
               <div className="flex items-center gap-2">
@@ -340,6 +347,45 @@ export default function Home() {
               </Button>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* Hype Radar */}
+      <section className="container px-4 md:px-6 py-24 border-t border-primary/5">
+        <div className="flex flex-col items-center text-center space-y-3 mb-20">
+          <h2 className="text-5xl font-black tracking-tighter italic">Trending</h2>
+          <p className="text-muted-foreground max-w-lg mx-auto text-xs uppercase tracking-[0.2em] font-bold opacity-60">
+            Real-time campus momentum
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          {allEvents.filter(e => e.isInternal).slice(0, 3).map((event, i) => (
+            <motion.div 
+              key={event.id || i}
+              whileHover={{ y: -8 }}
+              className="group space-y-6 text-center"
+            >
+              <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden border border-primary/5 shadow-sm transition-all group-hover:border-primary/20">
+                <img 
+                  src={event.image || "/placeholder.svg"} 
+                  alt={event.title}
+                  className="w-full h-full object-cover transition-all duration-700 scale-105 group-hover:scale-100"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6 text-left">
+                  <span className="text-[9px] font-black uppercase tracking-[0.15em] text-primary mb-2 block">{event.venue}</span>
+                  <h3 className="text-lg font-bold leading-tight group-hover:text-primary transition-colors">{event.title}</h3>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+
+          {allEvents.filter(e => e.isInternal).length === 0 && (
+             <div className="col-span-full py-12 text-center border border-dashed rounded-[3rem] border-primary/10">
+               <p className="text-muted-foreground italic text-sm">Waiting for more campus buzz to generate radar insights...</p>
+             </div>
+          )}
         </div>
       </section>
 
