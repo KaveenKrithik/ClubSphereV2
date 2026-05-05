@@ -3,16 +3,68 @@
 import { useAuth } from "@/components/auth-provider"
 import { redirect } from "next/navigation"
 import { motion } from "framer-motion"
-import { Calendar, ArrowLeft, LogOut, User as UserIcon, Mail, Clock } from "lucide-react"
+import { Calendar, ArrowLeft, LogOut, User as UserIcon, Mail, Clock, Bell, CheckCircle2, XCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Switch } from "@/components/ui/switch"
+import { toast } from "sonner"
+import { useEffect, useState } from "react"
+import { createClient } from "@/lib/supabase/client"
 import Link from "next/link"
 import { ModeToggle } from "@/components/mode-toggle"
 
 export default function ProfilePage() {
-  const { user, loading, signOut } = useAuth()
+  const { user, loading: authLoading, signOut } = useAuth()
+  const [isSubscribed, setIsSubscribed] = useState(false)
+  const [fetchingSub, setFetchingSub] = useState(true)
+  const [updatingSub, setUpdatingSub] = useState(false)
 
-  if (loading) {
+  useEffect(() => {
+    if (user) {
+      checkSubscription()
+    }
+  }, [user])
+
+  const checkSubscription = async () => {
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from('newsletter_subscriptions')
+      .select('email')
+      .eq('email', user?.email)
+      .single()
+    
+    if (data) setIsSubscribed(true)
+    setFetchingSub(false)
+  }
+
+  const toggleSubscription = async (checked: boolean) => {
+    setUpdatingSub(true)
+    const supabase = createClient()
+    
+    if (checked) {
+      const { error } = await supabase
+        .from('newsletter_subscriptions')
+        .insert([{ email: user?.email }])
+      
+      if (!error) {
+        setIsSubscribed(true)
+        toast.success("Event alerts activated")
+      }
+    } else {
+      const { error } = await supabase
+        .from('newsletter_subscriptions')
+        .delete()
+        .eq('email', user?.email)
+      
+      if (!error) {
+        setIsSubscribed(false)
+        toast.success("Event alerts deactivated")
+      }
+    }
+    setUpdatingSub(false)
+  }
+
+  if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -115,6 +167,45 @@ export default function ProfilePage() {
                   <span className="text-sm text-muted-foreground block text-center italic">
                     Start enrolling in hackathons to track your progress.
                   </span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Newsletter Subscription */}
+            <Card className="border-border/50 shadow-sm md:col-span-2">
+              <CardHeader>
+                <CardTitle className="text-xl flex items-center gap-2">
+                  <Bell className="h-5 w-5 text-primary" />
+                  Communication Preferences
+                </CardTitle>
+                <CardDescription>Manage how we keep you updated on campus events.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6 pt-0">
+                <div className="flex items-center justify-between p-4 bg-primary/5 rounded-xl border border-primary/10">
+                  <div className="space-y-0.5">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold">Newsletter & Alerts</span>
+                      {isSubscribed ? (
+                        <CheckCircle2 className="h-4 w-4 text-green-500" />
+                      ) : (
+                        <XCircle className="h-4 w-4 text-muted-foreground" />
+                      )}
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Receive weekly summaries of hackathons, workshops, and exclusive club opportunities.
+                    </p>
+                  </div>
+                  <Switch 
+                    checked={isSubscribed} 
+                    onCheckedChange={toggleSubscription}
+                    disabled={updatingSub || fetchingSub}
+                  />
+                </div>
+                
+                <div className="p-4 bg-muted/30 rounded-lg border border-dashed text-center">
+                  <p className="text-xs text-muted-foreground">
+                    We hate spam as much as you do. You'll only receive high-quality, relevant updates.
+                  </p>
                 </div>
               </CardContent>
             </Card>

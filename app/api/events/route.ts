@@ -5,24 +5,53 @@ import { NextResponse } from 'next/server';
 // HELPERS
 // ==========================================
 const now = new Date();
+const twoMonthsFromNow = new Date();
+twoMonthsFromNow.setMonth(now.getMonth() + 2);
 
-function isExpired(dateStr: string): boolean {
+function isRelevant(dateStr: string): boolean {
   try {
-    // Handle various formats: "September 1, 2025", "May 8, 2026", "27th Apr 2026"
     const cleaned = dateStr
-      .replace(/(\d+)(st|nd|rd|th)/i, '$1') // "27th" -> "27"
-      .replace(/,?\s*-.*$/, '');              // "Sept 1-10, 2025" -> "Sept 1 2025"
+      .replace(/(\d+)(st|nd|rd|th)/i, '$1')
+      .replace(/,?\s*-.*$/, '');
     const parsed = new Date(cleaned);
     if (!isNaN(parsed.getTime())) {
-      return parsed < now;
+      // Must be in the future AND within 2 months
+      return parsed >= now && parsed <= twoMonthsFromNow;
     }
   } catch { /* ignore */ }
-  // If we can't parse, keep it (don't filter)
-  return false;
+  // If we can't parse, keep it as 'Upcoming'
+  return true;
 }
 
 function filterActive(events: any[]): any[] {
-  return events.filter(e => !isExpired(e.date));
+  return events.filter(e => isRelevant(e.date));
+}
+
+function isSRMEvent(event: any): boolean {
+  const srmPattern = /SRM|Kattankulathur|KTR|Ramapuram|Vadapalani|Modinagar|NCR/i;
+  return (
+    srmPattern.test(event.title) ||
+    srmPattern.test(event.description || '') ||
+    srmPattern.test(event.venue || '')
+  );
+}
+
+function sortEvents(events: any[]): any[] {
+  return events.sort((a, b) => {
+    // 1. Internal Priority (Internal first)
+    if (a.isInternal !== b.isInternal) {
+      return a.isInternal ? -1 : 1;
+    }
+    
+    // 2. Date Priority (Chronological)
+    const dateA = new Date(a.date.replace(/(\d+)(st|nd|rd|th)/i, '$1')).getTime();
+    const dateB = new Date(b.date.replace(/(\d+)(st|nd|rd|th)/i, '$1')).getTime();
+    
+    if (isNaN(dateA)) return 1;
+    if (isNaN(dateB)) return -1;
+    
+    return dateA - dateB;
+  });
 }
 
 // ==========================================
@@ -46,24 +75,32 @@ function parseUnstopItem(item: any): any {
   const addr = item.address_with_country_logo;
   const venue = addr?.city || addr?.state || 'Online';
 
-  return {
+  const event = {
     id: `unstop-${item.id}`,
     title: item.title || 'Untitled Event',
     description: `${item.title || ''} — by ${item.organisation?.name || 'Unstop'}`,
     date: dateStr,
     venue: typeof venue === 'string' ? venue : 'Online',
     image,
-    isExternal: true,
+    isExternal: true, // Default to true, will be overwritten by isSRM check
+    isInternal: false,
     enrollmentLink: item.seo_url || `https://unstop.com/${item.public_url}`,
     _type: item.type,       // "hackathons" or "workshops"
     _subtype: item.subtype,  // "online_coding_challenge", "workshops", etc.
   };
+
+  if (isSRMEvent(event)) {
+    event.isInternal = true;
+    event.isExternal = false;
+  }
+
+  return event;
 }
 
 async function fetchUnstop(): Promise<{ hackathons: any[]; workshops: any[] }> {
   try {
     const res = await fetch(
-      'https://unstop.com/api/public/opportunity/search-result?oppstatus=open&per_page=50',
+      'https://unstop.com/api/public/opportunity/search-result?oppstatus=open&per_page=100',
       {
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
@@ -78,10 +115,10 @@ async function fetchUnstop(): Promise<{ hackathons: any[]; workshops: any[] }> {
     // Split by type
     const hackathons = items.filter((i: any) =>
       i._type === 'hackathons' || i._subtype === 'online_coding_challenge'
-    ).slice(0, 20); // Increased limit slightly for dynamic content
+    ).slice(0, 40); // Increased limit for broader discovery
     const workshops = items.filter((i: any) =>
       i._type === 'workshops' || i._subtype === 'workshops' || i._subtype === 'webinars'
-    ).slice(0, 20);
+    ).slice(0, 40);
 
     // Clean up internal fields
     const clean = (arr: any[]) => arr.map(({ _type, _subtype, ...rest }) => rest);
@@ -128,16 +165,24 @@ function parseKnowAFestCard(link: string, content: string): any | null {
 
   if (title.length <= 3) return null;
 
-  return {
+  const event = {
     title,
     description: badge ? `${badge} — ${title}` : title,
     date: dateStr,
     venue: location,
     image,
     isExternal: true,
+    isInternal: false,
     enrollmentLink: `https://www.knowafest.com/${link}`,
     _badge: badge.toLowerCase(),
   };
+
+  if (isSRMEvent(event)) {
+    event.isInternal = true;
+    event.isExternal = false;
+  }
+
+  return event;
 }
 
 async function fetchKnowAFest(): Promise<{ hackathons: any[]; workshops: any[] }> {
@@ -163,12 +208,12 @@ async function fetchKnowAFest(): Promise<{ hackathons: any[]; workshops: any[] }
       const { _badge, ...event } = parsed;
 
       if (HACKATHON_BADGES.some(b => _badge.includes(b))) {
-        if (hackathons.length < 20) {
+        if (hackathons.length < 40) {
           hackathons.push({ id: `kf-h-${hackathons.length}`, ...event });
         }
       } else {
         // Everything else goes to workshops
-        if (workshops.length < 20) {
+        if (workshops.length < 40) {
           workshops.push({ id: `kf-w-${workshops.length}`, ...event });
         }
       }
@@ -198,8 +243,8 @@ export async function GET() {
   const allWorkshops = [...unstop.workshops, ...knowafest.workshops];
 
   // Filter out expired events
-  const activeHackathons = filterActive(allHackathons);
-  const activeWorkshops = filterActive(allWorkshops);
+  const activeHackathons = sortEvents(filterActive(allHackathons));
+  const activeWorkshops = sortEvents(filterActive(allWorkshops));
 
   return NextResponse.json({
     hackathons: activeHackathons,

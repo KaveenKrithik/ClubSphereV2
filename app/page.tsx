@@ -17,6 +17,8 @@ import { motion } from "framer-motion"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useAuth } from "@/components/auth-provider"
 import { SignInPrompt } from "@/components/sign-in-prompt"
+import { toast } from "sonner"
+import { AboutModal } from "@/components/about-modal"
 
 // Clubs data remains static as requested
 const clubsData = [
@@ -112,6 +114,9 @@ export default function Home() {
   const { user, loading: authLoading, signOut } = useAuth()
   const [hackathonSearch, setHackathonSearch] = useState("")
   const [workshopSearch, setWorkshopSearch] = useState("")
+  const [email, setEmail] = useState("")
+  const [submitting, setSubmitting] = useState(false)
+  const [subscriptionStatus, setSubscriptionStatus] = useState<"idle" | "success" | "error">("idle")
 
   useEffect(() => {
     setMounted(true)
@@ -143,6 +148,34 @@ export default function Home() {
   )
 
   const allEvents = [...hackathonEvents, ...workshopEvents]
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email || submitting) return
+
+    setSubmitting(true)
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await res.json()
+
+      if (res.ok) {
+        setSubscriptionStatus("success")
+        toast.success(data.message || "Successfully subscribed!")
+        setEmail("")
+      } else {
+        toast.error(data.error || "Something went wrong")
+      }
+    } catch (err) {
+      toast.error("Failed to connect to the server")
+    } finally {
+      setSubmitting(false)
+    }
+  }
 
   const LoadingThrobber = () => (
     <div className="w-full py-20 flex flex-col items-center justify-center gap-4">
@@ -449,16 +482,18 @@ export default function Home() {
                   <span>Supporting student-led initiatives</span>
                 </li>
               </ul>
-              <Button size="lg" className="mt-4 group">
-                Learn More
-                <motion.span
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}
-                  className="ml-2"
-                >
-                  →
-                </motion.span>
-              </Button>
+              <AboutModal>
+                <Button size="lg" className="mt-4 group">
+                  Learn More
+                  <motion.span
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}
+                    className="ml-2"
+                  >
+                    →
+                  </motion.span>
+                </Button>
+              </AboutModal>
             </motion.div>
             <div className="relative aspect-video overflow-hidden rounded-xl">
               <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 z-10 rounded-xl" />
@@ -557,23 +592,36 @@ export default function Home() {
               viewport={{ once: true }}
               className="w-full max-w-sm space-y-2"
             >
-              <form className="flex space-x-2">
+              <form onSubmit={handleSubscribe} className="flex space-x-2">
                 <input
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   placeholder="Enter your email"
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
+                  disabled={submitting || subscriptionStatus === "success"}
                 />
-                <ConfettiButton href="#" className="group">
-                  Subscribe
-                  <motion.span
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ repeat: Number.POSITIVE_INFINITY, duration: 2 }}
-                    className="ml-2"
-                  >
-                  </motion.span>
+                <ConfettiButton 
+                  type="submit"
+                  href="#" 
+                  className={`group subscribe-btn ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  disabled={submitting || subscriptionStatus === "success"}
+                >
+                  {submitting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : subscriptionStatus === "success" ? (
+                    "Subscribed!"
+                  ) : (
+                    "Subscribe"
+                  )}
                 </ConfettiButton>
               </form>
+              {subscriptionStatus === "success" && (
+                <p className="text-sm text-green-500 font-medium animate-in fade-in slide-in-from-top-1">
+                  Welcome to the sphere. Your event alerts are now active.
+                </p>
+              )}
             </motion.div>
           </div>
         </div>
