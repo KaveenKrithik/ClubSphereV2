@@ -22,7 +22,7 @@ export function AboutModal({ children }: { children: React.ReactNode }) {
       <DialogContent className="max-w-xl bg-background/80 backdrop-blur-2xl border-primary/20 rounded-[2.5rem] shadow-2xl p-0 overflow-hidden">
         <div className="p-10 max-h-[80vh] overflow-y-auto scrollbar-hide">
           <DialogHeader className="mb-8">
-            <DialogTitle className="text-4xl font-black tracking-tight text-center">
+            <DialogTitle className="sr-only">
               The ClubSphere Vision
             </DialogTitle>
           </DialogHeader>
