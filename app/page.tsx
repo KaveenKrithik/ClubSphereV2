@@ -14,11 +14,13 @@ import { ScrollProgress } from "@/components/scroll-progress"
 import { ConfettiButton } from "@/components/confetti-button"
 import { AnimatedCard, CardContent, CardHeader, CardTitle } from "@/components/animated-card"
 import { EventCalendar } from "@/components/event-calendar"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useAuth } from "@/components/auth-provider"
 import { SignInPrompt } from "@/components/sign-in-prompt"
 import { toast } from "sonner"
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
+import Autoplay from "embla-carousel-autoplay"
 import { AboutModal } from "@/components/about-modal"
 import { CommandMenu } from "@/components/command-menu"
 import { PathfinderModal } from "@/components/pathfinder-modal"
@@ -117,6 +119,15 @@ export default function Home() {
   const { user, loading: authLoading, signOut } = useAuth()
   const [hackathonSearch, setHackathonSearch] = useState("")
   const [workshopSearch, setWorkshopSearch] = useState("")
+  const [showPathfinder, setShowPathfinder] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowPathfinder(window.scrollY > 400)
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
   const [email, setEmail] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [subscriptionStatus, setSubscriptionStatus] = useState<"idle" | "success" | "error">("idle")
@@ -236,9 +247,6 @@ export default function Home() {
           </nav>
           <div className="flex items-center gap-4">
             <CommandMenu />
-            <div className="hidden md:block">
-              <PathfinderModal />
-            </div>
             <ModeToggle />
             {user ? (
               <div className="flex items-center gap-2">
@@ -359,30 +367,57 @@ export default function Home() {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {allEvents.filter(e => e.isInternal).slice(0, 3).map((event, i) => (
-            <motion.div 
-              key={event.id || i}
-              whileHover={{ y: -8 }}
-              className="group space-y-6 text-center"
-            >
-              <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden border border-primary/5 shadow-sm transition-all group-hover:border-primary/20">
-                <img 
-                  src={event.image || "/placeholder.svg"} 
-                  alt={event.title}
-                  className="w-full h-full object-cover transition-all duration-700 scale-105 group-hover:scale-100"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6 text-left">
-                  <span className="text-[9px] font-black uppercase tracking-[0.15em] text-primary mb-2 block">{event.venue}</span>
-                  <h3 className="text-lg font-bold leading-tight group-hover:text-primary transition-colors">{event.title}</h3>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+        <div className="w-full">
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            plugins={[
+              Autoplay({
+                delay: 5000,
+                stopOnInteraction: false,
+              }),
+            ]}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-4 md:-ml-12">
+              {allEvents.filter(e => e.isInternal).map((event, i) => (
+                <CarouselItem key={event.id || i} className="pl-4 md:pl-12 md:basis-1/2 lg:basis-1/3">
+                  <motion.div 
+                    whileHover={{ y: -10 }}
+                    className="group"
+                  >
+                    <Link href={event.enrollmentLink} target="_blank" rel="noopener noreferrer" className="block">
+                      <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden border border-primary/5 shadow-2xl transition-all group-hover:border-primary/30">
+                        <img 
+                          src={event.image || "/placeholder.svg"} 
+                          alt={event.title}
+                          className="w-full h-full object-cover transition-all duration-700 scale-105 group-hover:scale-100 image-render-high-quality"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+                        <div className="absolute bottom-8 left-8 right-8 text-left space-y-2">
+                          <span className="text-[9px] font-black uppercase tracking-[0.2em] text-primary block opacity-80">{event.venue}</span>
+                          <h3 className="text-2xl font-bold leading-tight tracking-tight group-hover:text-primary transition-colors">{event.title}</h3>
+                          <div className="flex items-center gap-2 pt-2">
+                            <div className="h-px w-8 bg-primary/30" />
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Register Now</span>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="flex justify-center gap-4 mt-12">
+               <CarouselPrevious className="static translate-y-0 h-12 w-12 rounded-full border-primary/10 hover:bg-primary/5" />
+               <CarouselNext className="static translate-y-0 h-12 w-12 rounded-full border-primary/10 hover:bg-primary/5" />
+            </div>
+          </Carousel>
 
           {allEvents.filter(e => e.isInternal).length === 0 && (
-             <div className="col-span-full py-12 text-center border border-dashed rounded-[3rem] border-primary/10">
+             <div className="col-span-full py-20 text-center border border-dashed rounded-[3rem] border-primary/10">
                <p className="text-muted-foreground italic text-sm">Waiting for more campus buzz to generate radar insights...</p>
              </div>
           )}
@@ -692,6 +727,21 @@ export default function Home() {
         </div>
       </footer>
       <SignInPrompt />
+      <AboutModal />
+
+      {/* Floating AI Pathfinder */}
+      <AnimatePresence>
+        {showPathfinder && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: -20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: -20 }}
+            className="fixed top-24 right-8 z-50"
+          >
+            <PathfinderModal />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

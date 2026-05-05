@@ -10,6 +10,10 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  .image-render-high-quality {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: high-quality;
+  }
 }
 
 html,

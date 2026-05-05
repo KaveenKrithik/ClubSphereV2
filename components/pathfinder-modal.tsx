@@ -19,9 +19,9 @@ export function PathfinderModal() {
     // Simulate AI thinking
     setTimeout(() => {
       setRecommendations([
-        { title: "IoT Alliance Induction", reason: "Best for hardware-software integration which matches your Robotics goal.", type: "Club" },
-        { title: "DevFocus Hackathon", reason: "A perfect place to apply your React skills in a high-pressure environment.", type: "Event" },
-        { title: "Cloud Fundamentals Workshop", reason: "Essential for scaling the applications you want to build.", type: "Workshop" }
+        { title: "IoT Alliance Induction", reason: "Best for hardware-software integration which matches your Robotics goal.", type: "Club", link: "https://unstop.com/hiring-challenges/recruitment-drive-iot-alliance-srm-1024344" },
+        { title: "DevFocus Hackathon", reason: "A perfect place to apply your React skills in a high-pressure environment.", type: "Event", link: "https://unstop.com/hackathons/devfocus-2025-srm-university-1033241" },
+        { title: "Cloud Fundamentals Workshop", reason: "Essential for scaling the applications you want to build.", type: "Workshop", link: "https://unstop.com/workshops/cloud-computing-101-srm-1044321" }
       ])
       setLoading(false)
       setStep(1)
@@ -31,13 +31,18 @@ export function PathfinderModal() {
   return (
     <Dialog onOpenChange={() => { setStep(0); setGoal(""); }}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="rounded-full gap-2 border-primary/20 hover:bg-primary/5 group shadow-lg">
-          <Sparkles className="h-4 w-4 text-primary group-hover:animate-pulse" />
-          AI Pathfinder
+        <Button variant="outline" size="icon" className="h-12 w-12 rounded-full border-primary/20 bg-background/80 backdrop-blur-xl shadow-2xl hover:scale-110 transition-transform group">
+          <Sparkles className="h-5 w-5 text-primary group-hover:rotate-12 transition-transform" />
+          <span className="sr-only">AI Pathfinder</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-md rounded-[2.5rem] border-primary/20 backdrop-blur-2xl p-0 overflow-hidden shadow-2xl">
         <div className="p-8 space-y-6">
+          <DialogHeader className="text-left">
+            <DialogTitle className="text-xl font-black">Pathfinder AI</DialogTitle>
+            <p className="text-[9px] text-muted-foreground uppercase tracking-[0.2em] font-bold">Strategic Planning</p>
+          </DialogHeader>
+
           <AnimatePresence mode="wait">
             {step === 0 ? (
               <motion.div
@@ -47,35 +52,33 @@ export function PathfinderModal() {
                 exit={{ opacity: 0, x: -20 }}
                 className="space-y-6"
               >
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-                    <Brain className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-black">Pathfinder AI</h2>
-                    <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Intelligent Discovery</p>
-                  </div>
-                </div>
 
-                <div className="space-y-4">
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    What are you looking to achieve this semester? Tell me your interests or career goals, and I'll map out your campus journey.
-                  </p>
-                  <div className="relative group">
-                    <Target className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-                    <Input 
-                      value={goal}
-                      onChange={(e) => setGoal(e.target.value)}
-                      placeholder="e.g. Master Web3, Win a Hackathon..." 
-                      className="pl-10 rounded-2xl bg-muted/50 border-primary/10 h-12"
-                    />
+                <div className="space-y-8">
+                  <div className="space-y-4">
+                    <p className="text-2xl font-light leading-snug tracking-tight">
+                      What are you looking to <span className="text-primary font-medium italic">achieve</span> this semester?
+                    </p>
+                    <div className="relative group">
+                      <Input 
+                        value={goal}
+                        onChange={(e) => setGoal(e.target.value)}
+                        placeholder="e.g. Master Web3, Win a Hackathon..." 
+                        className="rounded-none border-0 border-b border-primary/20 bg-transparent h-12 px-0 focus-visible:ring-0 focus-visible:border-primary transition-all text-lg"
+                      />
+                    </div>
                   </div>
                   <Button 
                     disabled={!goal || loading} 
                     onClick={startAnalysis}
-                    className="w-full rounded-2xl h-12 text-lg font-bold shadow-xl shadow-primary/20"
+                    variant="ghost"
+                    className="group p-0 h-auto hover:bg-transparent text-primary font-bold tracking-widest text-[10px] uppercase gap-2"
                   >
-                    {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Generate My Path"}
+                    {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : (
+                      <>
+                        Generate Strategy
+                        <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+                      </>
+                    )}
                   </Button>
                 </div>
               </motion.div>
@@ -85,38 +88,34 @@ export function PathfinderModal() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="space-y-6"
+                className="space-y-10"
               >
-                <div className="flex items-center justify-between">
-                   <div className="flex items-center gap-2">
-                     <Compass className="h-5 w-5 text-primary" />
-                     <h2 className="text-xl font-black">Your Strategy</h2>
-                   </div>
-                   <Button variant="ghost" size="sm" onClick={() => setStep(0)} className="text-xs">Reset</Button>
+                <div className="flex items-center justify-between border-b border-primary/10 pb-4">
+                   <h2 className="text-xs font-black uppercase tracking-[0.2em] opacity-60">Your Strategy</h2>
+                   <Button variant="link" size="sm" onClick={() => setStep(0)} className="text-[10px] uppercase font-bold p-0 h-auto">Reset</Button>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-8">
                   {recommendations.map((rec, i) => (
                     <motion.div
                       key={i}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.1 }}
-                      className="p-4 rounded-2xl bg-primary/5 border border-primary/10 space-y-1 hover:bg-primary/10 transition-colors cursor-default"
+                      className="group"
                     >
-                      <div className="flex justify-between items-center">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-primary/60">{rec.type}</span>
-                        <ArrowRight className="h-3 w-3 text-primary/40" />
-                      </div>
-                      <h4 className="font-bold text-sm">{rec.title}</h4>
-                      <p className="text-[11px] text-muted-foreground leading-tight">{rec.reason}</p>
+                      <a href={rec.link || "#"} target="_blank" rel="noopener noreferrer" className="space-y-2 block">
+                        <div className="flex items-center gap-3">
+                          <span className="text-[10px] font-bold text-primary/40">0{i + 1}</span>
+                          <h4 className="font-bold tracking-tight text-lg group-hover:text-primary transition-colors">{rec.title}</h4>
+                        </div>
+                        <p className="text-muted-foreground text-xs leading-relaxed pl-7 max-w-[280px]">
+                          {rec.reason}
+                        </p>
+                      </a>
                     </motion.div>
                   ))}
                 </div>
-
-                <p className="text-[10px] text-center text-muted-foreground italic">
-                  Analysis based on current event availability and club activities.
-                </p>
               </motion.div>
             )}
           </AnimatePresence>
