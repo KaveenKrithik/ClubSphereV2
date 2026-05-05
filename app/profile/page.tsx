@@ -3,7 +3,7 @@
 import { useAuth } from "@/components/auth-provider"
 import { redirect } from "next/navigation"
 import { motion } from "framer-motion"
-import { Calendar, ArrowLeft, LogOut, User as UserIcon, Mail, Clock, Bell, CheckCircle2, XCircle, GraduationCap, Shield } from "lucide-react"
+import { Calendar, ArrowLeft, LogOut, User as UserIcon, Mail, Clock, Bell, CheckCircle2, XCircle, GraduationCap, Shield, Zap, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
@@ -75,14 +75,15 @@ export default function ProfilePage() {
 
   if (!user) {
     redirect("/sign-in")
+    return null
   }
 
   // Actual data from Supabase user object
-  const joinedDate = new Date(user.created_at).toLocaleDateString('en-US', {
+  const joinedDate = user.created_at ? new Date(user.created_at).toLocaleDateString('en-US', {
     month: 'long',
     day: 'numeric',
     year: 'numeric'
-  })
+  }) : "Recent"
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-20">
