@@ -382,7 +382,7 @@ export default function Home() {
             className="w-full"
           >
             <CarouselContent className="-ml-4 md:-ml-12">
-              {allEvents.filter(e => e.isInternal).map((event, i) => (
+              {[...allEvents.filter(e => e.isInternal), ...allEvents.filter(e => !e.isInternal)].slice(0, 10).map((event, i) => (
                 <CarouselItem key={event.id || i} className="pl-4 md:pl-12 md:basis-1/2 lg:basis-1/3">
                   <motion.div 
                     whileHover={{ y: -10 }}
