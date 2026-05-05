@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 
-export function PathfinderModal() {
+export function PathfinderModal({ events = [] }: { events?: any[] }) {
   const [step, setStep] = useState(0)
   const [goal, setGoal] = useState("")
   const [loading, setLoading] = useState(false)
@@ -16,16 +16,45 @@ export function PathfinderModal() {
 
   const startAnalysis = () => {
     setLoading(true)
-    // Simulate AI thinking
+    
+    // Simulate AI thinking and then perform dynamic matching
     setTimeout(() => {
-      setRecommendations([
-        { title: "IoT Alliance Induction", reason: "Best for hardware-software integration which matches your Robotics goal.", type: "Club", link: "https://unstop.com/hiring-challenges/recruitment-drive-iot-alliance-srm-1024344" },
-        { title: "DevFocus Hackathon", reason: "A perfect place to apply your React skills in a high-pressure environment.", type: "Event", link: "https://unstop.com/hackathons/devfocus-2025-srm-university-1033241" },
-        { title: "Cloud Fundamentals Workshop", reason: "Essential for scaling the applications you want to build.", type: "Workshop", link: "https://unstop.com/workshops/cloud-computing-101-srm-1044321" }
-      ])
+      const userGoal = goal.toLowerCase()
+      
+      // Simple semantic matching logic
+      const matched = events
+        .filter(event => {
+          const content = (event.title + " " + event.description).toLowerCase()
+          // Check for keyword matches
+          return content.includes(userGoal) || 
+                 userGoal.split(" ").some(word => word.length > 3 && content.includes(word))
+        })
+        .slice(0, 3)
+        .map(event => ({
+          title: event.title,
+          reason: `Highly relevant to your goal of "${goal}". This ${event.isExternal ? 'external' : 'SRM'} opportunity aligns with your profile.`,
+          link: event.enrollmentLink,
+          type: event.isExternal ? 'Global' : 'Internal'
+        }))
+
+      // Fallback if no specific matches found
+      const finalRecommendations = matched.length >= 2 ? matched : [
+        ...matched,
+        ...events
+          .filter(e => !matched.find(m => m.title === e.title))
+          .slice(0, 3 - matched.length)
+          .map(event => ({
+            title: event.title,
+            reason: `Strategy: This event is currently trending in the SRM ecosystem and could broaden your horizons while pursuing "${goal}".`,
+            link: event.enrollmentLink,
+            type: event.isExternal ? 'Global' : 'Internal'
+          }))
+      ]
+
+      setRecommendations(finalRecommendations)
       setLoading(false)
       setStep(1)
-    }, 2000)
+    }, 1500)
   }
 
   return (

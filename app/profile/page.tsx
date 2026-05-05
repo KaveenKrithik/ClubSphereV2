@@ -3,7 +3,7 @@
 import { useAuth } from "@/components/auth-provider"
 import { redirect } from "next/navigation"
 import { motion } from "framer-motion"
-import { Calendar, ArrowLeft, LogOut, User as UserIcon, Mail, Clock, Bell, CheckCircle2, XCircle, GraduationCap } from "lucide-react"
+import { Calendar, ArrowLeft, LogOut, User as UserIcon, Mail, Clock, Bell, CheckCircle2, XCircle, GraduationCap, Shield } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
@@ -124,7 +124,14 @@ export default function ProfilePage() {
 
           <div className="grid gap-6 md:grid-cols-2">
             {/* User Details */}
-            <Card className="border-border/50 shadow-sm">
+            <Card className="border-border/50 shadow-sm relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
+                <img 
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(user?.email || "")}&bgcolor=000000&color=ffffff&margin=10`} 
+                  alt="Networking QR"
+                  className="h-20 w-20 rounded-lg invert dark:invert-0"
+                />
+              </div>
               <CardHeader>
                 <CardTitle className="text-xl">Personal Information</CardTitle>
                 <CardDescription>Details associated with your Google account.</CardDescription>
@@ -144,6 +151,29 @@ export default function ProfilePage() {
                     <span className="text-sm font-medium">{joinedDate}</span>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Smart Alerts (The Sentinel) */}
+            <Card className="border-border/50 shadow-sm border-l-4 border-l-primary/50">
+              <CardHeader>
+                <CardTitle className="text-xl flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-primary" />
+                  The Sentinel
+                </CardTitle>
+                <CardDescription>Intelligent campus reminders.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3 pt-0">
+                <div className="flex items-start gap-3 p-3 bg-primary/5 rounded-lg border border-primary/10">
+                  <div className="h-2 w-2 rounded-full bg-primary mt-1.5 animate-pulse" />
+                  <div className="flex flex-col">
+                    <span className="text-[10px] uppercase text-primary font-black tracking-widest">Active Insight</span>
+                    <p className="text-xs leading-relaxed">No upcoming sessions in the next 24 hours. Perfect time to explore the <Link href="/#clubs" className="underline font-bold">Clubs</Link> section.</p>
+                  </div>
+                </div>
+                <Button variant="outline" size="sm" className="w-full text-[10px] uppercase tracking-widest font-bold" onClick={() => toast.info("Sentinel is scanning for updates...")}>
+                  Refresh Analysis
+                </Button>
               </CardContent>
             </Card>
 
@@ -212,21 +242,17 @@ export default function ProfilePage() {
             </Card>
           </div>
 
-          {/* Skill Passport Section */}
-          <section className="space-y-4">
-            <div className="flex items-center justify-between border-b pb-2">
-              <h2 className="text-2xl font-bold flex items-center gap-2">
-                <GraduationCap className="h-6 w-6 text-primary" />
-                Skill Passport
-              </h2>
-              <Badge variant="secondary" className="rounded-full">Lvl 1 Explorer</Badge>
+          <section className="space-y-8 pt-12 border-t border-primary/5">
+            <div className="flex flex-col gap-2">
+              <h2 className="text-3xl font-black tracking-tighter uppercase italic">Skill Passport</h2>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-bold opacity-60">Verified Credentials</p>
             </div>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <BadgeCard title="Early Adopter" description="Joined ClubSphere V2" icon="🚀" date={joinedDate} verified />
-              <BadgeCard title="First Enroll" description="Enrolled in an event" icon="✅" disabled />
-              <BadgeCard title="Hackathon Pro" description="Won a campus hackathon" icon="🏆" disabled />
-              <BadgeCard title="Workshop Lead" description="Organized a session" icon="🎙️" disabled />
+              <BadgeCard title="Early Adopter" description="Joined ClubSphere V2" icon={<Zap className="h-6 w-6" />} date={joinedDate} verified />
+              <BadgeCard title="First Enroll" description="Enrolled in an event" icon={<CheckCircle2 className="h-6 w-6" />} disabled />
+              <BadgeCard title="Hackathon Pro" description="Won a campus hackathon" icon={<GraduationCap className="h-6 w-6" />} disabled />
+              <BadgeCard title="Workshop Lead" description="Organized a session" icon={<Users className="h-6 w-6" />} disabled />
             </div>
           </section>
 
@@ -255,20 +281,28 @@ export default function ProfilePage() {
 
 function BadgeCard({ title, description, icon, date, verified, disabled }: any) {
   return (
-    <Card className={`border-border/50 shadow-sm transition-all overflow-hidden relative ${disabled ? 'opacity-40 grayscale' : 'hover:scale-105 hover:border-primary/30'}`}>
-      <CardContent className="p-4 flex flex-col items-center text-center gap-2">
-        <div className="text-3xl mb-1">{icon}</div>
-        <div className="space-y-1">
-          <h4 className="text-sm font-bold leading-none">{title}</h4>
-          <p className="text-[10px] text-muted-foreground leading-tight">{description}</p>
+    <div className={`group relative p-6 rounded-[2rem] border transition-all duration-500 ${disabled ? 'opacity-20 grayscale' : 'border-primary/10 bg-primary/[0.02] hover:border-primary/30 hover:bg-primary/[0.04]'}`}>
+      <div className="space-y-4">
+        <div className="flex items-start justify-between">
+          <div className={`p-3 rounded-2xl ${disabled ? 'bg-muted' : 'bg-primary/5 text-primary'} transition-colors group-hover:bg-primary/10`}>
+            {icon}
+          </div>
+          {verified && !disabled && (
+            <div className="h-6 w-6 rounded-full border border-primary/20 flex items-center justify-center">
+              <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+            </div>
+          )}
         </div>
-        {verified && (
-          <div className="absolute top-2 right-2">
-            <CheckCircle2 className="h-3 w-3 text-primary" />
+        <div className="space-y-1">
+          <h4 className="text-sm font-black uppercase tracking-widest">{title}</h4>
+          <p className="text-[10px] text-muted-foreground leading-relaxed uppercase tracking-wider opacity-60">{description}</p>
+        </div>
+        {date && !disabled && (
+          <div className="pt-2 border-t border-primary/5">
+            <span className="text-[8px] font-black uppercase tracking-[0.2em] text-primary/40">{date}</span>
           </div>
         )}
-        {date && <span className="text-[9px] font-medium text-primary/60 mt-1">{date}</span>}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

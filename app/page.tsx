@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Calendar, Users, Code, BookOpen, Menu, User as UserIcon, Search, Loader2, Sparkles } from "lucide-react"
+import { Calendar, Users, Code, BookOpen, Menu, User as UserIcon, Search, Loader2, Sparkles, Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -399,9 +399,20 @@ export default function Home() {
                         <div className="absolute bottom-8 left-8 right-8 text-left space-y-2">
                           <span className="text-[9px] font-black uppercase tracking-[0.2em] text-primary block opacity-80">{event.venue}</span>
                           <h3 className="text-2xl font-bold leading-tight tracking-tight group-hover:text-primary transition-colors">{event.title}</h3>
-                          <div className="flex items-center gap-2 pt-2">
-                            <div className="h-px w-8 bg-primary/30" />
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Register Now</span>
+                          <div className="flex items-center justify-between pt-2">
+                            <div className="flex items-center gap-2">
+                              <div className="h-px w-8 bg-primary/30" />
+                              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Register Now</span>
+                            </div>
+                            <button 
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                              }}
+                              className="h-10 w-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-white/20 transition-all active:scale-95 border border-white/10 group/heart"
+                            >
+                              <Heart className="h-4 w-4 text-primary transition-colors group-hover/heart:fill-primary" />
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -653,6 +664,12 @@ export default function Home() {
       {/* Newsletter */}
       <section className="py-16 md:py-24 bg-muted/40">
         <div className="container px-4 md:px-6">
+          <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
+            <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase italic">Hype Radar</h2>
+            <p className="text-muted-foreground text-sm uppercase tracking-[0.3em] font-bold opacity-60">
+              Real-time Campus Insights
+            </p>
+          </div>
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -738,7 +755,7 @@ export default function Home() {
             exit={{ opacity: 0, scale: 0.8, y: -20 }}
             className="fixed top-24 right-8 z-50"
           >
-            <PathfinderModal />
+            <PathfinderModal events={allEvents} />
           </motion.div>
         )}
       </AnimatePresence>
