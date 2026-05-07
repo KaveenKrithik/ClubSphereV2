@@ -25,7 +25,7 @@ export default function RootLayout({
         <link rel="icon" href="/cslogo.png" type="image/png" />
       </head>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <AuthProvider>
             {children}
             <Toaster richColors position="top-right" />

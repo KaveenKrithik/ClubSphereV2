@@ -1,12 +1,14 @@
 "use client"
 import Link from "next/link"
-import { Calendar, MapPin, ExternalLink } from "lucide-react"
+import { Calendar, MapPin, ExternalLink, Heart } from "lucide-react"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Autoplay from "embla-carousel-autoplay"
 import * as React from "react"
+import { useLikes } from "@/hooks/use-likes"
+
 
 interface Event {
   id: string
@@ -24,6 +26,8 @@ interface EventCarouselProps {
 }
 
 export function EventCarousel({ events }: EventCarouselProps) {
+  const { toggleLike, isLiked } = useLikes()
+
   return (
     <Carousel
       opts={{
@@ -47,19 +51,31 @@ export function EventCarousel({ events }: EventCarouselProps) {
                   <img
                     src={event.image || "https://placehold.co/600x400/e2e8f0/1e293b?text=Event+Poster"}
                     alt={event.title}
-                    className="h-full w-full object-cover transition-all hover:scale-105 duration-500"
+                    className="h-full w-full object-cover transition-all hover:scale-105 duration-500 image-render-high-quality contrast-[1.05]"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.onerror = null;
                       target.src = `https://placehold.co/600x400/1e293b/e2e8f0?text=${encodeURIComponent(event.title.substring(0, 30))}`;
                     }}
                   />
-                  {event.isExternal && (
+                   {event.isExternal && (
                     <Badge variant="secondary" className="absolute top-2 right-2 flex items-center gap-1">
                       <ExternalLink className="h-3 w-3" />
                       External
                     </Badge>
                   )}
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      toggleLike(event.id);
+                    }}
+                    className="absolute top-2 left-2 h-8 w-8 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:bg-background transition-all active:scale-90 shadow-sm z-10"
+                  >
+                    <Heart 
+                      className={`h-4 w-4 text-primary transition-colors ${isLiked(event.id) ? 'fill-primary' : ''}`} 
+                    />
+                  </button>
                 </div>
               </CardHeader>
               <CardContent className="flex-grow p-6">

@@ -126,13 +126,7 @@ export default function ProfilePage() {
           <div className="grid gap-6 md:grid-cols-2">
             {/* User Details */}
             <Card className="border-border/50 shadow-sm relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
-                <img 
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(user?.email || "")}&bgcolor=000000&color=ffffff&margin=10`} 
-                  alt="Networking QR"
-                  className="h-20 w-20 rounded-lg invert dark:invert-0"
-                />
-              </div>
+
               <CardHeader>
                 <CardTitle className="text-xl">Personal Information</CardTitle>
                 <CardDescription>Details associated with your Google account.</CardDescription>

@@ -24,6 +24,8 @@ import Autoplay from "embla-carousel-autoplay"
 import { AboutModal } from "@/components/about-modal"
 import { CommandMenu } from "@/components/command-menu"
 import { PathfinderModal } from "@/components/pathfinder-modal"
+import { useLikes } from "@/hooks/use-likes"
+
 
 // Clubs data remains static as requested
 const clubsData = [
@@ -120,6 +122,8 @@ export default function Home() {
   const [hackathonSearch, setHackathonSearch] = useState("")
   const [workshopSearch, setWorkshopSearch] = useState("")
   const [showPathfinder, setShowPathfinder] = useState(false)
+  const { likedEvents, toggleLike, isLiked } = useLikes()
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -128,6 +132,7 @@ export default function Home() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
   const [email, setEmail] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [subscriptionStatus, setSubscriptionStatus] = useState<"idle" | "success" | "error">("idle")
@@ -381,9 +386,9 @@ export default function Home() {
             ]}
             className="w-full"
           >
-            <CarouselContent className="-ml-4 md:-ml-12">
+            <CarouselContent className="-ml-4 md:-ml-8">
               {[...allEvents.filter(e => e.isInternal), ...allEvents.filter(e => !e.isInternal)].slice(0, 10).map((event, i) => (
-                <CarouselItem key={event.id || i} className="pl-4 md:pl-12 md:basis-1/2 lg:basis-1/3">
+                <CarouselItem key={event.id || i} className="pl-4 md:pl-8 md:basis-1/2 lg:basis-1/3">
                   <motion.div 
                     whileHover={{ y: -10 }}
                     className="group"
@@ -393,12 +398,12 @@ export default function Home() {
                         <img 
                           src={event.image || "/placeholder.svg"} 
                           alt={event.title}
-                          className="w-full h-full object-cover transition-all duration-700 scale-105 group-hover:scale-100 image-render-high-quality"
+                          className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105 image-render-high-quality contrast-[1.05]"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
                         <div className="absolute bottom-8 left-8 right-8 text-left space-y-2">
                           <span className="text-[9px] font-black uppercase tracking-[0.2em] text-primary block opacity-80">{event.venue}</span>
-                          <h3 className="text-2xl font-bold leading-tight tracking-tight group-hover:text-primary transition-colors">{event.title}</h3>
+                          <h3 className="text-2xl font-bold leading-tight tracking-tight group-hover:text-primary transition-colors line-clamp-2">{event.title}</h3>
                           <div className="flex items-center justify-between pt-2">
                             <div className="flex items-center gap-2">
                               <div className="h-px w-8 bg-primary/30" />
@@ -408,10 +413,13 @@ export default function Home() {
                               onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
+                                toggleLike(event.id);
                               }}
                               className="h-10 w-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-white/20 transition-all active:scale-95 border border-white/10 group/heart"
                             >
-                              <Heart className="h-4 w-4 text-primary transition-colors group-hover/heart:fill-primary" />
+                              <Heart 
+                                className={`h-4 w-4 text-primary transition-colors ${isLiked(event.id) ? 'fill-primary' : 'group-hover/heart:fill-primary'}`} 
+                              />
                             </button>
                           </div>
                         </div>
@@ -426,13 +434,13 @@ export default function Home() {
                <CarouselNext className="static translate-y-0 h-12 w-12 rounded-full border-primary/10 hover:bg-primary/5" />
             </div>
           </Carousel>
+        </div>
 
           {allEvents.filter(e => e.isInternal).length === 0 && (
              <div className="col-span-full py-20 text-center border border-dashed rounded-[3rem] border-primary/10">
                <p className="text-muted-foreground italic text-sm">Waiting for more campus buzz to generate radar insights...</p>
              </div>
           )}
-        </div>
       </section>
 
       {/* Hackathons Section */}
@@ -753,7 +761,7 @@ export default function Home() {
             initial={{ opacity: 0, scale: 0.8, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: -20 }}
-            className="fixed top-24 right-8 z-50"
+            className="fixed bottom-6 right-6 z-50"
           >
             <PathfinderModal events={allEvents} />
           </motion.div>

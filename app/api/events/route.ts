@@ -59,8 +59,13 @@ function sortEvents(events: any[]): any[] {
 // Fetches both hackathons AND workshops
 // ==========================================
 function parseUnstopItem(item: any): any {
-  // Use org's full-size logo (works), fallback to 150x150 thumbnail
-  const image = item.organisation?.logoUrl || item.logoUrl2 || '';
+  let image = item.banner_url || item.organisation?.logoUrl || item.logoUrl2 || '';
+  
+  // Clean CloudFront/resizing parameters to get full resolution
+  if (image) {
+    image = image.split('?')[0];
+  }
+
 
   const endDate = item.regnRequirements?.end_regn_dt || item.end_date;
   let dateStr = 'Upcoming';
