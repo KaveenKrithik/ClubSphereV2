@@ -8,18 +8,28 @@ import { Button } from "@/components/ui/button"
 export function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
   const [showPrompt, setShowPrompt] = useState(false)
+  const [isIOS, setIsIOS] = useState(false)
 
   useEffect(() => {
+    // Check if user is on iOS
+    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream
+    setIsIOS(isIOSDevice)
+
     const handler = (e: any) => {
-      // Prevent Chrome 67 and earlier from automatically showing the prompt
       e.preventDefault()
-      // Stash the event so it can be triggered later.
       setDeferredPrompt(e)
       
-      // Check if the user has already dismissed the prompt in this session
       const isDismissed = sessionStorage.getItem("pwa-prompt-dismissed")
       if (!isDismissed) {
-        // Show the prompt after a short delay
+        setTimeout(() => setShowPrompt(true), 3000)
+      }
+    }
+
+    // iOS doesn't trigger beforeinstallprompt, so we show it manually
+    if (isIOSDevice) {
+      const isDismissed = sessionStorage.getItem("pwa-prompt-dismissed")
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone
+      if (!isDismissed && !isStandalone) {
         setTimeout(() => setShowPrompt(true), 3000)
       }
     }
@@ -90,26 +100,40 @@ export function PWAInstallPrompt() {
                 <h3 className="font-bold text-lg tracking-tight">Install ClubSphere</h3>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Add ClubSphere to your home screen for a faster, full-screen campus experience.
+                {isIOS 
+                  ? "Tap the 'Share' icon in your browser and select 'Add to Home Screen' to install."
+                  : "Add ClubSphere to your home screen for a faster, full-screen campus experience."
+                }
               </p>
             </div>
           </div>
 
           <div className="mt-6 flex gap-3">
-            <Button 
-              onClick={handleInstall}
-              className="flex-1 rounded-xl h-11 font-bold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
-            >
-              <Download className="mr-2 h-4 w-4" />
-              Install Now
-            </Button>
-            <Button 
-              variant="outline" 
-              onClick={handleDismiss}
-              className="rounded-xl h-11 border-primary/10 hover:bg-primary/5"
-            >
-              Maybe Later
-            </Button>
+            {!isIOS ? (
+              <>
+                <Button 
+                  onClick={handleInstall}
+                  className="flex-1 rounded-xl h-11 font-bold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Install Now
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={handleDismiss}
+                  className="rounded-xl h-11 border-primary/10 hover:bg-primary/5"
+                >
+                  Maybe Later
+                </Button>
+              </>
+            ) : (
+              <Button 
+                onClick={handleDismiss}
+                className="flex-1 rounded-xl h-11 font-bold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
+              >
+                Got it
+              </Button>
+            )}
           </div>
         </div>
       </motion.div>
